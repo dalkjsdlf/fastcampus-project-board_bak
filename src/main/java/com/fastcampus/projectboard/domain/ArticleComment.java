@@ -1,17 +1,62 @@
 package com.fastcampus.projectboard.domain;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.LocalDateTime;
+import java.util.Objects;
+
+@Entity
+@Getter
+@ToString
+@Table(indexes = {
+        @Index(columnList = "content"),
+        @Index(columnList = "createdAt"),
+        @Index(columnList = "createdBy"),
+})
+@EntityListeners(AuditingEntityListener.class)
 
 public class ArticleComment {
-    //기본 정보
-    private Long id;
-    private Article article;           // 게시글(ID)
-    private String content;            // 본문
-    private String hashtag;            // 해시태그
 
-    //메타정보
-    private LocalDateTime createdAt;   // 생성일자
-    private String createdBy;          // 생성자
-    private LocalDateTime modifiedAt;  // 수정일자
-    private String modifiedBy;         // 수정자
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Setter @ManyToOne(optional = false) private Article article;
+    @Setter @Column(nullable = false) private String content;
+
+    // 메타정보
+    @CreatedDate @Column(nullable = false) private LocalDateTime createdAt;
+    @CreatedBy @Column(nullable = false, length = 100) private String createdBy;
+    @LastModifiedDate @Column(nullable = false) private LocalDateTime modifiedAt;
+    @LastModifiedBy @Column(nullable = false, length = 100) private String modifiedBy;
+
+    protected ArticleComment() {}
+
+    private ArticleComment(Article article, String content) {
+        this.article = article;
+        this.content = content;
+    }
+
+    public static ArticleComment of(Article article, String content){
+        return new ArticleComment(article, content);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ArticleComment that)) return false;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
