@@ -10,3 +10,4 @@ public class FastCampusProjectBoardApplication {
 		SpringApplication.run(FastCampusProjectBoardApplication.class, args);
 	}
 }
+
