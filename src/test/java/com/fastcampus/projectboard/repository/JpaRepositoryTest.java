@@ -83,7 +83,7 @@ class JpaRepositoryTest {
 
         long previousCount = articleRepository.count();
         long previousCommentCount = articleCommentRepository.count();
-        int commentsSize = article.getArticleCommentSet().size();
+        int commentsSize = article.getArticleComments().size();
 
         //when
         articleRepository.delete(article);

@@ -32,7 +32,7 @@ public class Article extends AuditingFields{
     @ToString.Exclude
     @OrderBy("id")
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
-    private final Set<ArticleComment> articleCommentSet = new LinkedHashSet<ArticleComment>();
+    private final Set<ArticleComment> articleComments = new LinkedHashSet<ArticleComment>();
 
     protected Article() {}
     private Article(String title, String content, String hashtag) {
